@@ -10,7 +10,7 @@ def protected(func):
 
 @protected
 def protected_func():
-    print('Tu contraseña es correcta.')
+    print('La contraseña es correcta.')
 
 if __name__ == '__main__':
     password = str(input('Introduzca la contraseña: '))
