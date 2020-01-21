@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from users.models import Profile
 from django.db.utils import IntegrityError
-from users.forms import ProfileForm
+from users.forms import ProfileForm, SignupForm
 
 # Create your views here.
 def login_view(request):
@@ -15,13 +15,13 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
-            return redirect('feed')
+            return redirect('posts:feed')
         else:
             return render(request, 'users/login.html', {'error': 'Invalid username or password'})
 
     return render(request, 'users/login.html')
 
-def signup_view(request):
+def signup_view2(request):
     """Sign up view."""
     if request.method == 'POST':
         username = request.POST['username']
@@ -48,6 +48,23 @@ def signup_view(request):
 
     return render(request, 'users/signup.html')
 
+def signup_view(request):
+    if request.method == 'POST':
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('users:login')
+    else:
+        form = SignupForm()
+
+    return render(
+        request=request,
+        template_name='users/signup.html',
+        context={
+            'form': form
+        }
+    )
+
 @login_required
 def update_profile(request):
     """Update a user's profile view."""
@@ -65,7 +82,7 @@ def update_profile(request):
             profile.save()
 
             #return redirect('update_profile')
-            return redirect('feed')
+            return redirect('posts:feed')
 
     else:
         form = ProfileForm()
@@ -83,4 +100,4 @@ def update_profile(request):
 @login_required
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('users:login')
