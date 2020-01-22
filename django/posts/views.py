@@ -3,8 +3,19 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from posts.forms import PostForm
 from posts.models import Post
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView
 
 # Create your views here.
+class PostsFeedView(LoginRequiredMixin, ListView):
+    """Return all published posts."""
+
+    template_name = 'posts/feed.html'
+    model = Post
+    ordering = ('-created',)
+    paginate_by = 2
+    context_object_name = 'posts'
+
 @login_required
 def list_posts(request):
     """List existing posts."""
@@ -18,7 +29,7 @@ def create_post(request):
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('feed')
+            return redirect('posts:feed')
 
     else:
         form = PostForm()
