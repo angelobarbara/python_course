@@ -6,12 +6,12 @@ from django.contrib.auth.models import User
 from users.models import Profile
 
 class SignupForm(forms.Form):
-    username = forms.CharField(min_length=4,max_length=50,required=True)
-    password = forms.CharField(min_length=4,max_length=70,widget=forms.PasswordInput(),required=True)
-    password_confirmation = forms.CharField(min_length=4,max_length=70,widget=forms.PasswordInput(),required=True)
-    first_name = forms.CharField(min_length=2,max_length=50,required=True)
-    last_name = forms.CharField(min_length=2,max_length=50,required=True)
-    email = forms.CharField(min_length=6,max_length=70,widget=forms.EmailInput(),required=True)
+    username = forms.CharField(min_length=4,max_length=50,required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    password = forms.CharField(min_length=4,max_length=70,widget=forms.PasswordInput(attrs={'class': 'form-control'}),required=True)
+    password_confirmation = forms.CharField(min_length=4,max_length=70,widget=forms.PasswordInput(attrs={'class': 'form-control'}),required=True)
+    first_name = forms.CharField(min_length=2,max_length=50,required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    last_name = forms.CharField(min_length=2,max_length=50,required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email = forms.CharField(min_length=6,max_length=70,widget=forms.EmailInput(attrs={'class': 'form-control'}),required=True)
 
     def clean_username(self):
         """Username must be unique"""
